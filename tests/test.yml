@@ -1,5 +1,20 @@
 ---
 - hosts: localhost
-  remote_user: root
-  roles:
-    - ansible-role-passwordstate
+
+  tasks:
+  - name: GetFolders
+    vars:
+      apicall: GetFolders
+    include_role:
+        name: ../ansible-role-passwordstate
+  - debug:
+      var=GetFolders.json
+
+  - name: GetFolder
+    vars:
+      apicall: GetFolder
+      FolderName: "API Folder 2"
+    include_role:
+        name: ../ansible-role-passwordstate
+  - debug:
+      var=GetFolder.json
