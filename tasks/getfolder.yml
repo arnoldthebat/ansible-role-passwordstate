@@ -1,0 +1,41 @@
+---
+- name: "{{ apicall }} facts"
+  vars:
+    querystring: ""
+
+
+  set_fact:
+    querystring: "{{querystring}}{{ item.param }}={{ item.criteria | replace(' ','%20') }}&"
+  loop: "{{ params }}"
+
+- name: The query will be
+  debug: 
+    msg: "{{ querystring |truncate(255) }}"
+
+# tmpvar: "{{tmpvar}}-{{item.split('=')[0]}}" |truncate(9)
+
+# - name: bodger
+#   app_string: >-
+#     {{ "%s=%s"
+#     item.param,
+#     item.criteria
+#     ) }}
+#   loop: "{{ params }}"
+
+# - name: The query will be
+#   debug: 
+#     msg: "{{ app_string }}"
+
+# - name: "{{ apicall }}"
+#   uri:
+#     url: "{{ ''.join((passwordstate_host,
+#       'api/folders/?FolderName=',
+#       FolderName ))}}"
+#     validate_certs: "{{ validate_certs }}"
+#     headers:
+#       APIKey: "{{ systemwide_apikey }}"
+#     method: GET
+#     return_content: yes
+#     status_code: 200
+#     body_format: json
+#   register: GetFolder

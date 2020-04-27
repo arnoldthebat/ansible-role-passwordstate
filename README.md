@@ -1,3 +1,5 @@
+<!-- cspell:ignore Ansible, hostvars, boto, apicall, passwordstate, vars, playbook -->
+
 Role Name
 =========
 
@@ -23,14 +25,31 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+- hosts: localhost
+
+  tasks:
+  - name: GetFolders
+    vars:
+      apicall: GetFolders
+    include_role:
+        name: ansible-role-passwordstate
+  - debug:
+      var=GetFolders.json
+```
+
+Example execution of the tests:
+
+```bash
+ansible-playbook ${HOME}/dev/ansible-role-passwordstate/tests/test.yml \
+  --extra-vars="@/${HOME}/passwordstate.yml" \
+  --vault-id ~/vault_password -v
+```
 
 License
 -------
 
-BSD
+GNU
 
 Author Information
 ------------------

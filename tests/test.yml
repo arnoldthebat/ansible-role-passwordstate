@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
+  gather_facts: no
 
   tasks:
   - name: GetFolders
@@ -9,12 +10,18 @@
         name: ../ansible-role-passwordstate
   - debug:
       var=GetFolders.json
+      verbosity=1
 
   - name: GetFolder
     vars:
       apicall: GetFolder
-      FolderName: "API Folder 2"
+      params:
+        - param: "Folder"
+          criteria: "Very Dodgy"
+        - param: "Description"
+          criteria: "Not Very Dodgy"
     include_role:
         name: ../ansible-role-passwordstate
   - debug:
       var=GetFolder.json
+      verbosity=1

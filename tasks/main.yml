@@ -2,32 +2,4 @@
 # tasks file for ansible-role-passwordstate
 
 - name: "{{ apicall }}"
-  uri:
-    url: "{{ passwordstate_host }}api/folders/"
-    validate_certs: "{{ validate_certs }}"
-    headers:
-      APIKey: "{{ systemwide_apikey }}"
-    method: GET
-    return_content: yes
-    status_code: 200
-    body_format: json
-  register: GetFolders
-  when: 
-    apicall == "GetFolders"
-
-- name: "{{ apicall }}"
-  uri:
-    url: "{{ ''.join((passwordstate_host, 
-      'api/folders/?FolderName=', 
-      FolderName | urlencode))}}"
-    validate_certs: "{{ validate_certs }}"
-    headers:
-      APIKey: "{{ systemwide_apikey }}"
-    method: GET
-    return_content: yes
-    status_code: 200
-    body_format: json
-  register: GetFolder
-  when: 
-    apicall == "GetFolder"
-
+  include_tasks: "{{ apicall | lower }}.yml"
