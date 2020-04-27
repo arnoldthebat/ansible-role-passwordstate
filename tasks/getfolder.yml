@@ -3,14 +3,11 @@
   vars:
     querystring: ""
 
-
   set_fact:
-    querystring: "{{querystring}}{{ item.param }}={{ item.criteria | replace(' ','%20') }}&"
+    querystring: 
+      "{{querystring}}{{ item.param }}={{ item.criteria |
+         replace(' ','%20') }}&"
   loop: "{{ params }}"
-
-- name: The query will be
-  debug: 
-    msg: "{{ querystring |trim('&') }}"
 
 - name: "{{ apicall }}"
   uri:

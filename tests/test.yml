@@ -16,8 +16,8 @@
     vars:
       apicall: GetFolder
       params:
-        - param: "Folder"
-          criteria: "API Folder"
+        - param: "FolderName"
+          criteria: "API Folder 1"
         # - param: "Description"
         #   criteria: "Not Very Dodgy"
     include_role:
