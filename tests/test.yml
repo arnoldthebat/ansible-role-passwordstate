@@ -17,9 +17,9 @@
       apicall: GetFolder
       params:
         - param: "Folder"
-          criteria: "Very Dodgy"
-        - param: "Description"
-          criteria: "Not Very Dodgy"
+          criteria: "API Folder"
+        # - param: "Description"
+        #   criteria: "Not Very Dodgy"
     include_role:
         name: ../ansible-role-passwordstate
   - debug:
