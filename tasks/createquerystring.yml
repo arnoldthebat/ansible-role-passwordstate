@@ -1,0 +1,14 @@
+---
+- name: "{{ passwordstate_apicall }} facts"
+  # Set an initial var to hold the query, Reset from previous plays
+  set_fact:
+    passwordstate_querystring: ''
+
+- name: "Setup the Query String for {{ passwordstate_apicall }} "
+  # Concat the params into one larger query string
+  set_fact:
+    passwordstate_querystring:
+      "{{ passwordstate_querystring }}{{ item.key }}={{ item.value |
+         replace(' ','%20') }}&"
+  loop: "{{ passwordstate_params }}"
+  when: passwordstate_params is defined

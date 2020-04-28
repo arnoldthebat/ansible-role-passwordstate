@@ -1,2 +1,7 @@
 ---
 # vars file for ansible-role-passwordstate
+
+# Constructs the URL to fire based on the apicall
+passwordstate_url: "{{ ''.join((passwordstate_host,
+      'api/', passwordstate_apicall, '/?',
+      passwordstate_querystring |trim('&') ))}}"
