@@ -1,0 +1,25 @@
+---
+- block:
+  - name: "{{ passwordstate_apicall }} facts"
+    # Set an initial var to hold the postdata, Reset from previous plays
+    set_fact:
+      passwordstate_postpayload: ''
+
+  - name: "Setup the Post Data for {{ passwordstate_apicall }} "
+    # Concat the params into one larger query string
+    set_fact:
+      passwordstate_postpayload:
+        '{{ passwordstate_postpayload }}"{{ item.key }}":"{{ item.value }}",'
+    loop: "{{ passwordstate_postdata }}"
+
+  # TODO: Does ansible have a better way to create JSON objects?
+  - name: Trim the PostData and make as JSON
+    set_fact:
+      passwordstate_postpayload:
+        "{{ ''.join (('{', passwordstate_postpayload |trim(','), '}')) }}"
+
+  - debug:
+      var=passwordstate_postpayload
+      verbosity=1
+
+  when: passwordstate_postdata is defined
