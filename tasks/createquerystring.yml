@@ -8,7 +8,7 @@
   # Concat the params into one larger query string
   set_fact:
     passwordstate_querystring:
-      "{{ passwordstate_querystring }}{{ item.key }}={{ item.value |
+      "{{ passwordstate_querystring }}{{ item.key }}={{ item.value | default(omit) |
          replace(' ','%20') }}&"
   loop: "{{ passwordstate_params }}"
   when: passwordstate_params is defined

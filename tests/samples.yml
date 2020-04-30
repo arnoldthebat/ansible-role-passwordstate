@@ -130,3 +130,33 @@
   - debug:
       var=password.json
       verbosity=1
+
+  - name: Retrive Passwords for a list with full audit
+    vars:
+      passwordstate_apicall: passwords
+      passwords_apikey: "{{ sample_password_apikey }}"
+      passwordstate_params:
+        - key: 'PasswordID'
+          value: '38'
+        - key: 'QueryAll'
+    include_role:
+        name: ansible-role-passwordstate
+  - debug:
+      var=password.json
+      verbosity=1
+
+  - name: Retrive Passwords for a list
+    vars:
+      passwordstate_apicall: passwords
+      passwords_apikey: "{{ sample_password_apikey }}"
+      passwordstate_params:
+        - key: 'PasswordID'
+          value: '38'
+        - key: 'QueryAll'
+        - key: 'PreventAuditing'
+          value: 'true'
+    include_role:
+        name: ansible-role-passwordstate
+  - debug:
+      var=password.json
+      verbosity=1

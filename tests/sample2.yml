@@ -1,0 +1,53 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+  - name: GeneratePassword
+    vars:
+      passwordstate_apicall: generatepassword
+      passwordstate_params:
+        - key: 'PasswordGeneratorID'
+          value: '2'
+    include_role:
+        name: ansible-role-passwordstate
+  - debug:
+      var=generatepassword.json
+      verbosity=1
+
+  - name: AddPassword
+    vars:
+      passwordstate_apicall: passwords
+      passwords_apikey: "{{ sample_password_apikey }}"
+      passwordstate_postdata:
+        - key: 'PasswordListID'
+          value: '38'
+        - key: 'Title'
+          value: 'Sample Title 2'
+        - key: 'UserName'
+          value: 'administrator'
+        - key: 'password'
+          value: "{{ generatepassword.json[0].Password }}"
+      passwordstate_api_method: 'post'
+    include_role:
+        name: ansible-role-passwordstate
+  - debug:
+      var=password.json
+      verbosity=1
+
+  - name: UpdatePassword
+    vars:
+      passwordstate_apicall: passwords
+      passwords_apikey: "{{ sample_password_apikey }}"
+      passwordstate_postdata:
+        - key: 'PasswordID'
+          value: '24'
+        - key: 'password'
+          value: "{{ generatepassword.json[0].Password }}"
+      passwordstate_api_method: 'put'
+    include_role:
+        name: ansible-role-passwordstate
+  - debug:
+      var=password.json
+      verbosity=1
