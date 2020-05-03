@@ -46,6 +46,15 @@ ansible-playbook ${HOME}/dev/ansible-role-passwordstate/tests/test.yml \
   --vault-id ~/vault_password -v
 ```
 
+In order to run the samples from within the role directory for testing, use the following command line example to set the roles path:
+
+```bash
+export ANSIBLE_ROLES_PATH=$HOME/dev && \
+ansible-playbook "${HOME}/dev/ansible-role-passwordstate/tests/samples.yml" \
+--extra-vars="@/${HOME}/passwordstate.yml" \
+--vault-id ~/vault_password -v
+```
+
 License
 -------
 

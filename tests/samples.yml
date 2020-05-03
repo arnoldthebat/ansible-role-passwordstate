@@ -9,8 +9,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=folders.json
-      verbosity=1
+      var: folders.json
+      verbosity: 1
 
   - name: GetFolder
     vars:
@@ -23,8 +23,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=folders.json
-      verbosity=1
+      var: folders.json
+      verbosity: 1
 
   - name: GeneratePassword
     vars:
@@ -32,8 +32,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=passwordlists.json
-      verbosity=1
+      var: passwordlists.json
+      verbosity: 1
 
   - name: GeneratePassword
     vars:
@@ -41,8 +41,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=generatepassword.json
-      verbosity=1
+      var: generatepassword.json
+      verbosity: 1
 
   - name: GeneratePassword
     vars:
@@ -55,8 +55,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=generatepassword.json
-      verbosity=1
+      var: generatepassword.json
+      verbosity: 1
 
   - name: GeneratePassword
     vars:
@@ -67,8 +67,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=generatepassword.json
-      verbosity=1
+      var: generatepassword.json
+      verbosity: 1
 
   - name: AddPassword
     vars:
@@ -87,8 +87,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=password.json
-      verbosity=1
+      var: password.json
+      verbosity: 1
 
   - name: GeneratePassword
     vars:
@@ -99,8 +99,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=generatepassword.json
-      verbosity=1
+      var: generatepassword.json
+      verbosity: 1
 
   - name: UpdatePassword
     vars:
@@ -115,8 +115,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=password.json
-      verbosity=1
+      var: password.json
+      verbosity: 1
 
   - name: GetPassword
     vars:
@@ -128,8 +128,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=password.json
-      verbosity=1
+      var: password.json
+      verbosity: 1
 
   - name: Retrive Passwords for a list with full audit
     vars:
@@ -142,8 +142,8 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=password.json
-      verbosity=1
+      var: password.json
+      verbosity: 1
 
   - name: Retrive Passwords for a list
     vars:
@@ -158,5 +158,5 @@
     include_role:
         name: ansible-role-passwordstate
   - debug:
-      var=password.json
-      verbosity=1
+      var: password.json
+      verbosity: 1

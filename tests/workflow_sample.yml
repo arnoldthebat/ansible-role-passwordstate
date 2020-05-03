@@ -1,0 +1,44 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  vars:
+    folder_vars:
+      - key: 'FolderName'
+        value: 'UnitTests'
+      - key: 'Description'
+        value: 'Unit Tests description'
+
+  tasks:   
+
+  - name: Search for a folder
+    vars:
+      passwordstate_apicall: folders
+      passwordstate_params:
+        "{{ folder_vars }}"
+    include_role:
+        name: ansible-role-passwordstate
+
+  - name: Testing
+    debug: 
+      msg: "I will create a folder"
+    # when: folders.json[0].errors[0].message == "Not Found"
+    when: folders | json_query ( 'json[0].errors[0].message' ) == "Not Found"
+
+
+  # Note: Must have a valid "CopyPermissionsFromPasswordListID" or
+  # "CopyPermissionsFromTemplateID" Otherwise you wont be able to see the
+  # folder....
+
+  # - name: Create the folder if it doesnt exist
+  #   vars:
+  #     passwordstate_apicall: folders
+  #     passwordstate_params:
+  #       "{{ passwordstate_params_vars }}"
+  #   include_role:
+  #       name: ansible-role-passwordstate
+  #   when: folders.json[0].errors
+  # - debug:
+  #     var=folders.json
+  #     verbosity=1
+  # json_query('domain.server[?cluster==`cluster1`].port')

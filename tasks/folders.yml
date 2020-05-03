@@ -1,8 +1,15 @@
 ---
+- name: "Load Post Data: {{ passwordstate_apicall }}"
+  include_role:
+    name: ansible-role-passwordstate
+    tasks_from: createpostpayload
+  when: passwordstate_postdata is defined
+
 - name: "Load Query String for {{ passwordstate_apicall }}"
   include_role:
     name: ansible-role-passwordstate
     tasks_from: createquerystring
+  when: passwordstate_params is defined
 
   # Fire the api call, trimming the ending &
 - name: "{{ passwordstate_apicall }}"
@@ -13,6 +20,11 @@
       APIKey: "{{ systemwide_apikey }}"
     method: GET
     return_content: yes
-    status_code: 200
+    status_code: 
+      - 200
+      - 404 # permissable on search
     body_format: json
   register: folders
+  when: passwordstate_params is defined
+
+  
