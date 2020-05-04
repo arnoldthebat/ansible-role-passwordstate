@@ -11,6 +11,11 @@
     tasks_from: createquerystring
   when: passwordstate_params is defined
 
+- name : Set the api_method so we can set the status code
+  set_fact:
+    api_method: "{{ 'POST' if passwordstate_postdata is defined
+      else 'GET' | upper }}"
+
   # Fire the api call, trimming the ending &
 - name: "{{ passwordstate_apicall }}"
   uri:
@@ -18,13 +23,14 @@
     validate_certs: "{{ validate_certs }}"
     headers:
       APIKey: "{{ systemwide_apikey }}"
-    method: GET
+    method: "{{ api_method }}"
     return_content: yes
-    status_code: 
+    status_code:
       - 200
       - 404 # permissable on search
+      - 201 # permissable on post
+    body: "{{ passwordstate_postpayload | default(omit) }}"
     body_format: json
   register: folders
   when: passwordstate_params is defined
-
-  
+    or passwordstate_postdata is defined
