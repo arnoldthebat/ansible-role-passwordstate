@@ -83,7 +83,6 @@
           value: 'administrator'
         - key: 'password'
           value: "{{ generatepassword.json[0].Password }}"
-      passwordstate_api_method: 'post'
     include_role:
         name: ansible-role-passwordstate
   - debug:
@@ -111,7 +110,6 @@
           value: '24'
         - key: 'password'
           value: "{{ generatepassword.json[0].Password }}"
-      passwordstate_api_method: 'put'
     include_role:
         name: ansible-role-passwordstate
   - debug:

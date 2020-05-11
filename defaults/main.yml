@@ -2,3 +2,4 @@
 # defaults file for ansible-role-passwordstate
 
 validate_certs: false
+

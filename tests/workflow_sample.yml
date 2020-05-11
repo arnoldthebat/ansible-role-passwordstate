@@ -3,13 +3,24 @@
   gather_facts: no
 
   vars:
+
+    permissions_vars:
+      - key: 'CopyPermissionsFromTemplateID'
+        value: '1'
+
     folder_vars:
       - key: 'FolderName'
         value: 'UnitTests'
       - key: 'Description'
         value: 'Unit Tests description'
 
-  tasks:   
+    passwordlists_vars:
+    - key: 'PasswordList'
+      value: 'UnitTests'
+    - key: 'Description'
+      value: 'Unit Tests description'
+
+  tasks:
 
   - name: Search for a folder
     vars:
@@ -18,27 +29,68 @@
         "{{ folder_vars }}"
     include_role:
         name: ansible-role-passwordstate
+  - debug:
+      var: folders.json
+      verbosity: 1
 
-  - name: Testing
-    debug: 
-      msg: "I will create a folder"
-    # when: folders.json[0].errors[0].message == "Not Found"
-    when: folders | json_query ( 'json[0].errors[0].message' ) == "Not Found"
-
-
-  # Note: Must have a valid "CopyPermissionsFromPasswordListID" or
+  # ! Must have a valid "CopyPermissionsFromPasswordListID" or
   # "CopyPermissionsFromTemplateID" Otherwise you wont be able to see the
-  # folder....
+  # object. Thats not a problem for programtic access via API key but in case
+  # users need to tinker, they need to be set
+  - block:
+    - name: Create the folder if it doesnt exist
+      vars:
+        passwordstate_apicall: folders
+        passwordstate_postdata:
+          "{{ folder_vars + permissions_vars }}"
+      include_role:
+          name: ansible-role-passwordstate
+    when: folders | json_query ( 'json[0].errors[0].message' ) == 'Not Found'
 
-  # - name: Create the folder if it doesnt exist
-  #   vars:
-  #     passwordstate_apicall: folders
-  #     passwordstate_params:
-  #       "{{ passwordstate_params_vars }}"
-  #   include_role:
-  #       name: ansible-role-passwordstate
-  #   when: folders.json[0].errors
-  # - debug:
-  #     var=folders.json
-  #     verbosity=1
-  # json_query('domain.server[?cluster==`cluster1`].port')
+  - name: Search for a passwordlist
+    vars:
+      passwordstate_apicall: searchpasswordlists
+      passwordstate_params:
+        "{{ passwordlists_vars }}"
+    include_role:
+        name: ansible-role-passwordstate
+  - debug:
+      var: searchpasswordlists.json
+      verbosity: 1
+
+  - block:
+    - name: Setup the vars for post. Caters for the different JSON the
+        API returns!
+      set_fact:
+        nested_folder_vars:
+          - key: 'NestUnderFolderID'
+            value: "{{ folders.json.FolderID | default(folders.json[0].FolderID)
+              | default ('0') }}"
+    - name: Now set the concatenated vars and work
+        around https://github.com/ansible/ansible/issues/40239
+      set_fact:
+        passwordlists_vars: "{{ passwordlists_vars + permissions_vars
+          + nested_folder_vars }}"
+    - debug:
+        var: passwordlists_vars
+        verbosity: 1
+    when: searchpasswordlists | json_query ( 'json[0].errors[0].message' )
+      == 'Not Found'
+
+  # ! Must have a valid "CopyPermissionsFromPasswordListID" or
+  # "CopyPermissionsFromTemplateID" Otherwise you wont be able to see the
+  # object. Thats not a problem for programtic access via API key but in case
+  # users need to tinker, they need to be set
+  - block:
+    - name: Create the passwordlists if it doesnt exist
+      vars:
+        passwordstate_apicall: passwordlists
+        passwordstate_postdata:
+          "{{ passwordlists_vars }}"
+      include_role:
+          name: ansible-role-passwordstate
+    - debug:
+        var: passwordlists.json
+        verbosity: 1
+    when: searchpasswordlists | json_query ( 'json[0].errors[0].message' )
+      == 'Not Found'
