@@ -20,7 +20,7 @@
     - key: 'Description'
       value: 'Unit Tests description'
 
-  tasks:   
+  tasks:
 
   - name: Search for a folder
     vars:
@@ -37,7 +37,7 @@
   # "CopyPermissionsFromTemplateID" Otherwise you wont be able to see the
   # object. Thats not a problem for programtic access via API key but in case
   # users need to tinker, they need to be set
-  - block: 
+  - block:
     - name: Create the folder if it doesnt exist
       vars:
         passwordstate_apicall: folders
@@ -46,7 +46,7 @@
       include_role:
           name: ansible-role-passwordstate
     when: folders | json_query ( 'json[0].errors[0].message' ) == 'Not Found'
-  
+
   - name: Search for a passwordlist
     vars:
       passwordstate_apicall: searchpasswordlists
@@ -58,18 +58,18 @@
       var: searchpasswordlists.json
       verbosity: 1
 
-  - block: 
-    - name: Setup the vars for post. Caters for the different JSON the 
+  - block:
+    - name: Setup the vars for post. Caters for the different JSON the
         API returns!
       set_fact:
-        nested_folder_vars: 
+        nested_folder_vars:
           - key: 'NestUnderFolderID'
             value: "{{ folders.json.FolderID | default(folders.json[0].FolderID)
               | default ('0') }}"
-    - name: Now set the concatenated vars and work 
+    - name: Now set the concatenated vars and work
         around https://github.com/ansible/ansible/issues/40239
       set_fact:
-        passwordlists_vars: "{{ passwordlists_vars + permissions_vars 
+        passwordlists_vars: "{{ passwordlists_vars + permissions_vars
           + nested_folder_vars }}"
     - debug:
         var: passwordlists_vars
@@ -92,6 +92,5 @@
     - debug:
         var: passwordlists.json
         verbosity: 1
-    when: searchpasswordlists | json_query ( 'json[0].errors[0].message' ) 
+    when: searchpasswordlists | json_query ( 'json[0].errors[0].message' )
       == 'Not Found'
-  
